@@ -1,17 +1,49 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
-import { mockBarData as data } from "../data/mockData";
+import { useEffect, useState } from 'react';
+import { getFetch } from "../commons/ApiMethods";
 
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [data, setData] = useState([]);
+  const [keys, setKeys] = useState([]);
+  const [maxSales, setMaxSales] = useState(0);
+
+  useEffect(() => {
+    getFetch('menus').then((fetchedData) => {
+      const allMenus = [...new Set(fetchedData.map(menu => menu.name))];
+      setKeys(allMenus);
+      console.log(allMenus);
+
+      const specificMenuProducts = fetchedData
+          .reduce((acc, menu) => {
+            return [
+              ...acc,
+              ...menu.products.map(product => ({
+                user: product.name,
+                ...allMenus.reduce((menuSales, menuName) => {
+                  menuSales[menuName] = menu.name === menuName ? product.total_sales : 0;
+                  return menuSales;
+                }, {})
+              }))
+            ]
+          }, []);
+
+      setData(specificMenuProducts);
+
+      const maxSalesValue = Math.max(...specificMenuProducts.map(product => product.sales));
+      setMaxSales(maxSalesValue);
+    });
+  }, []);
+
+  const tickValues = Array.from({ length: maxSales + 1 }, (_, index) => index);
 
   return (
     <ResponsiveBar
       data={data}
       theme={{
-        // added
         axis: {
           domain: {
             line: {
@@ -39,10 +71,10 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
+      keys={keys}
       indexBy="user"
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-      padding={0.3}
+      padding={0.1}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
       colors={{ scheme: "nivo" }}
@@ -76,7 +108,7 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "user", // changed
+        legend: isDashboard ? undefined : "user",
         legendPosition: "middle",
         legendOffset: 32,
       }}
@@ -84,9 +116,11 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food", // changed
+        legend: isDashboard ? undefined : "food",
         legendPosition: "middle",
         legendOffset: -40,
+        format: value => isNaN(value) ? "" : value.toFixed(0),
+        tickValues,
       }}
       enableLabel={false}
       labelSkipWidth={12}

@@ -5,7 +5,7 @@ import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Login from "./scenes/login/login";
 import Team from "./scenes/team";
-import Invoices from "./scenes/invoices";
+import Products from "./scenes/products";
 import Clients from "./scenes/clients";
 import Form from "./scenes/form";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -35,7 +35,7 @@ function App() {
                             <Route path="/dashboard" element={<Protected isLoggedIn={isLoggedIn}><Dashboard /></Protected>} />
                             <Route path="/team" element={<Protected isLoggedIn={isLoggedIn}><Team /></Protected>} />
                             <Route path="/clients" element={<Protected isLoggedIn={isLoggedIn}><Clients /></Protected>} />
-                            <Route path="/invoices" element={<Protected isLoggedIn={isLoggedIn}><Invoices /></Protected>} />
+                            <Route path="/products" element={<Protected isLoggedIn={isLoggedIn}><Products /></Protected>} />
                             <Route path="/form" element={<Protected isLoggedIn={isLoggedIn}><Form /></Protected>} />
                         </Routes>
                     </main>

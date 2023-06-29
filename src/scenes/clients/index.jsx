@@ -1,65 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { getFetch } from "../../commons/ApiMethods";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
+import PersonIcon from '@mui/icons-material/Person';
 
 const Clients = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
     const columns = [
-        { field: "id", headerName: "ID", flex: 0.5 },
-        { field: "registrarId", headerName: "Registrar ID" },
+        { field: "id", headerName: "ID", flex: 0.2 },
         {
-            field: "name",
-            headerName: "Name",
+            field: "categoryName",
+            headerName: "Category",
             flex: 1,
-            cellClassName: "name-column--cell",
+            renderCell: ({ row }) => {
+                return (
+                    <Box
+                        width="25%"
+                        m="0 auto"
+                        p="5px"
+                        display="flex"
+                        justifyContent="center"
+                        backgroundColor={
+                            row.categoryName === "user"
+                                ? colors.greenAccent[600]
+                                : colors.greenAccent[600]
+                        }
+                        borderRadius="4px">
+                        {row.categoryName ? (
+                            <PersonIcon />
+                        ) : (
+                            <PersonIcon />
+                        )}
+                        <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+                            {row.categoryName ? 'Cliente' : 'Cliente'}
+                        </Typography>
+                    </Box>
+                );
+            },
         },
-        {
-            field: "age",
-            headerName: "Age",
-            type: "number",
-            headerAlign: "left",
-            align: "left",
-        },
-        {
-            field: "phone",
-            headerName: "Phone Number",
-            flex: 1,
-        },
-        {
-            field: "email",
-            headerName: "Email",
-            flex: 1,
-        },
-        {
-            field: "address",
-            headerName: "Address",
-            flex: 1,
-        },
-        {
-            field: "city",
-            headerName: "City",
-            flex: 1,
-        },
-        {
-            field: "zipCode",
-            headerName: "Zip Code",
-            flex: 1,
-        },
+        { field: "email", headerName: "Email", flex: 1 },
     ];
+
 
     const [contents, setContents] = useState([])
     const [loading, setLoading] = useState(false)
-
     useEffect(() => {
         setLoading(true)
-        getFetch('api/clients').then((data) => {
-            setContents(data)
+        getFetch('categories').then((data) => {
+            const users = data
+                .filter(category => category.category_name === "User")
+                .reduce((acc, category) => {
+                return [...acc, ...category.users.map(user => ({ categoryId: category.id, categoryName: category.category_name, ...user }))]
+            }, [])
+            setContents(users)
             setLoading(false)
         })
     }, [])

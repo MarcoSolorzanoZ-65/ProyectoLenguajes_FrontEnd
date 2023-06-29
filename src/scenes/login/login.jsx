@@ -3,12 +3,10 @@ import {Link, useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
 import { postFetch } from "../../commons/ApiMethods";
 import './login.css';
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../../components/Header";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {color} from "chart.js/helpers";
-import {blue} from "@mui/material/colors";
 
 const Login = (props) => {
     const [username, setUsername] = useState('');
@@ -29,9 +27,9 @@ const Login = (props) => {
             navigate('/dashboard');
             props.setIsLoggedIn(true);
             try {
-                const resp = await postFetch('User/Authenticate', inputobj);
+                const resp = await postFetch('signin/login', inputobj);
                 console.log(resp);
-                if (1/*Object.keys(resp).length*/ === 0) {
+                if (Object.keys(resp).length === 0) {
                     toast.error('Login failed, invalid credentials');
                 } else {
                     toast.success('Success');
@@ -54,7 +52,7 @@ const Login = (props) => {
             result = false;
             toast.warning('Please Enter Password');
         }
-        return true;
+        return result;
     }
 
     return (
