@@ -18,7 +18,7 @@ function Protected({ children }) {
 
 function App() {
     const [theme, colorMode] = useMode();
-    const [isSidebar, setIsSidebar] = useState(true);
+    const [isSidebar] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('isLoggedIn'));
 
     return (
