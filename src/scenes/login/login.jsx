@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
-import { toast } from "react-toastify";
+import {ToastContainer, toast} from 'react-toastify';
 import { postFetch } from "../../commons/ApiMethods";
 import './login.css';
 import { Box } from "@mui/material";
@@ -47,16 +47,20 @@ const Login = (props) => {
         if (username === '' || username === null) {
             result = false;
             toast.warning('Please Enter Username');
+            console.log(1);
         }
         if (password === '' || password === null) {
             result = false;
             toast.warning('Please Enter Password');
+            console.log(2);
         }
         return result;
     }
 
+
     return (
         <Box m="20px">
+            <ToastContainer />
             <Box
                 display="flex"
                 justifyContent="center"

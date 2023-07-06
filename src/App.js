@@ -4,10 +4,7 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import Login from "./scenes/login/login";
-import Team from "./scenes/team";
-import Products from "./scenes/products";
-import Clients from "./scenes/clients";
-import Form from "./scenes/form";
+import 'react-toastify/dist/ReactToastify.min.css';
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
@@ -33,10 +30,6 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                             <Route path="/dashboard" element={<Protected isLoggedIn={isLoggedIn}><Dashboard /></Protected>} />
-                            <Route path="/team" element={<Protected isLoggedIn={isLoggedIn}><Team /></Protected>} />
-                            <Route path="/clients" element={<Protected isLoggedIn={isLoggedIn}><Clients /></Protected>} />
-                            <Route path="/products" element={<Protected isLoggedIn={isLoggedIn}><Products /></Protected>} />
-                            <Route path="/form" element={<Protected isLoggedIn={isLoggedIn}><Form /></Protected>} />
                         </Routes>
                     </main>
                 </div>
