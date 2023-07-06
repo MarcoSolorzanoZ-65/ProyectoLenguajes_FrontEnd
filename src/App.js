@@ -10,14 +10,16 @@ import { ColorModeContext, useMode } from "./theme";
 
 import { Navigate } from 'react-router-dom';
 
-function Protected({isLoggedIn, children}) {
+function Protected({ children }) {
+    const isLoggedIn = !!sessionStorage.getItem('isLoggedIn');
     return isLoggedIn ? children : <Navigate to="/" replace />;
 }
+
 
 function App() {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('isLoggedIn'));
 
     return (
         <ColorModeContext.Provider value={colorMode}>
@@ -26,7 +28,7 @@ function App() {
                 <div className="app">
                     {isLoggedIn && <Sidebar isSidebar={isSidebar} />}
                     <main className="content">
-                        {isLoggedIn && <Topbar setIsSidebar={setIsSidebar} />}
+                        {isLoggedIn && <Topbar setIsLoggedIn={setIsLoggedIn} />}
                         <Routes>
                             <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
                             <Route path="/dashboard" element={<Protected isLoggedIn={isLoggedIn}><Dashboard /></Protected>} />
