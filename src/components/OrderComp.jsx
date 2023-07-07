@@ -73,7 +73,7 @@ const OrderComp = () => {
         }
     };
 
-    const filteredOrderData = orderData.filter((order) => order.order_status === 1).slice(0, 5);
+    const filteredOrderData = orderData.filter((order) => order.order_status === 1 || order.order_status === 0).slice(0, 5);
 
     return (
         <Box
@@ -107,16 +107,20 @@ const OrderComp = () => {
                     <Box
                         key={order.id}
                         gridColumn="span 2"
-                        bgcolor={colors.primary[400]}
+                        bgcolor={
+                            order.order_status === 0
+                                ? 'green'
+                                : order.order_status === 1
+                                    ? 'yellow'
+                                    : order.order_status === 2
+                                        ? 'red'
+                                        : colors.primary[400]
+                        }
                         p={2}
                         borderRadius={8}
                     >
                         <Typography variant="h6">Order ID: {order.id}</Typography>
-                        <DataGrid
-                            checkboxSelection
-                            rows={[]}
-                            columns={columns}
-                        />
+                        <DataGrid rows={[]} columns={columns} />
                         <Button
                             variant="contained"
                             onClick={() => handleSetOrderStatus(order.id)}
