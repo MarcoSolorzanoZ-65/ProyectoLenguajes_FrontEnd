@@ -14,17 +14,27 @@ export async function deleteFetch(path, signal) {
 }
 
 export async function postFetch(path, body, signal) {
+    const token = sessionStorage.getItem('token');
+    
+    let headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+  
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  
     let response = await fetch(`${process.env.REACT_APP_API_URL}/${path}`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body),
-        signal: signal,
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body),
+      signal: signal,
     });
+  
     return await response.json();
-}
+  }
+  
 
 export async function putFetch(path, body, signal) {
     let response = await fetch(`${process.env.REACT_APP_API_URL}/${path}`, {
