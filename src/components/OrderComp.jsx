@@ -6,7 +6,8 @@ import { getFetch, putFetch } from "../commons/ApiMethods";
 
 const OrderComp = () => {
     const columns = [
-        { field: "name", headerName: "Product Name", flex: 1 }
+        { field: "name", headerName: "Product Name", flex: 1 },
+        { field: "quantity", headerName: "Quantity", flex: 1 },
     ];
 
     const theme = useTheme();
@@ -17,7 +18,7 @@ const OrderComp = () => {
 
     useEffect(() => {
         setLoading(true);
-        getFetch('orders').then((data) => {
+        getFetch("orders").then((data) => {
             setOrderData(data);
             setLoading(false);
         });
@@ -27,7 +28,10 @@ const OrderComp = () => {
         const updatedOrderData = orderData.map((order) => {
             if (order.id === orderId) {
                 const updatedOrder = { ...order, order_status: 0 };
-                setUndoOrderData((prevUndoOrderData) => [...prevUndoOrderData, { ...order, order_status: 1 }]);
+                setUndoOrderData((prevUndoOrderData) => [
+                    ...prevUndoOrderData,
+                    { ...order, order_status: 1 },
+                ]);
                 putFetch(`orders/${orderId}`, { order_status: 0 })
                     .then((response) => {
                         if (response.success) {
@@ -73,15 +77,12 @@ const OrderComp = () => {
         }
     };
 
-    const filteredOrderData = orderData.filter((order) => order.order_status === 1 || order.order_status === 0).slice(0, 5);
+    const filteredOrderData = orderData
+        .filter((order) => order.order_status === 1 || order.order_status === 0)
+        .slice(0, 5);
 
     return (
-        <Box
-            display="grid"
-            gridTemplateColumns="repeat(12, 1fr)"
-            gridAutoRows="200px"
-            gap="20px"
-        >
+        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="200px" gap="20px">
             {loading ? (
                 <Box
                     gridColumn="span 4"
@@ -109,22 +110,22 @@ const OrderComp = () => {
                         gridColumn="span 2"
                         bgcolor={
                             order.order_status === 0
-                                ? 'green'
+                                ? "green"
                                 : order.order_status === 1
-                                    ? 'yellow'
+                                    ? "yellow"
                                     : order.order_status === 2
-                                        ? 'red'
+                                        ? "red"
                                         : colors.primary[400]
                         }
                         p={2}
                         borderRadius={8}
                     >
                         <Typography variant="h6">Order ID: {order.id}</Typography>
-                        <DataGrid rows={[]} columns={columns} />
+                        <DataGrid rows={order.products} columns={columns} />
                         <Button
                             variant="contained"
                             onClick={() => handleSetOrderStatus(order.id)}
-                            style={{ display: 'flex', justifyContent: 'center' }}
+                            style={{ display: "flex", justifyContent: "center" }}
                         >
                             Marcar como Entregado
                         </Button>

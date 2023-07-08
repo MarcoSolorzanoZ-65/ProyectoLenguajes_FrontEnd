@@ -21,34 +21,37 @@ const Login = (props) => {
         e.preventDefault();
         if (validate()) {
             let inputobj = {
-                "email": username,
-                "password": password
+                user: {
+                    email: username,
+                    password: password,
+                },
             };
             try {
-                const response = await postFetch('/login', inputobj);
+                const response = await postFetch('login', inputobj);
                 if (response.error) {
                     toast.error(response.error);
                 } else {
                     const { token, user } = response;
-                    const category_name = user.category.category_name; // Access name property from the nested category object
-                    sessionStorage.setItem('token', token);
-                    sessionStorage.setItem('isLoggedIn', true);
-                    sessionStorage.setItem('username', username);
-                    sessionStorage.setItem('category_name', category_name);
-                    props.setIsLoggedIn(true);
-                    navigate('/dashboard');
-                    toast.success('Success');
+                    const category_name = user.category.category_name;
+                    const allowedCategoryIds = [3]; // Specify the allowed category IDs for this app
+
+                    if (allowedCategoryIds.includes(user.category_id)) {
+                        sessionStorage.setItem('token', token);
+                        sessionStorage.setItem('isLoggedIn', true);
+                        sessionStorage.setItem('username', username);
+                        sessionStorage.setItem('category_name', category_name);
+                        props.setIsLoggedIn(true);
+                        navigate('/dashboard');
+                        toast.success('Success');
+                    } else {
+                        toast.error('You are not allowed to log in.');
+                    }
                 }
             } catch (err) {
                 toast.error('Login Failed due to :' + err.message);
             }
         }
     };
-
-
-
-
-
 
     const validate = () => {
         let result = true;
