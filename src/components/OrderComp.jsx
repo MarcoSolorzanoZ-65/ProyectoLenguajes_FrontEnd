@@ -88,7 +88,7 @@ const OrderComp = () => {
     };
 
     const filteredOrderData = orderData
-        .filter((order) => order.order_status !== 2 && order.order_status !== 3 && order.order_status !== 0)
+        .filter((order) => order.order_status === 1)
         .slice(0, 5);
 
     return (
