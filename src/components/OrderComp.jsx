@@ -42,7 +42,7 @@ const OrderComp = () => {
                     ...prevUndoOrderData,
                     { ...order, order_status: 1 },
                 ]);
-                putFetch(`orders/${orderId}`, { order_status: 0 })
+                putFetch(`orders/${orderId}`, { order_status: 5 })
                     .then((response) => {
                         if (response.success) {
                             console.log("Order status updated successfully.");
@@ -119,18 +119,18 @@ const OrderComp = () => {
                         key={order.id}
                         gridColumn="span 2"
                         bgcolor={
-                            order.order_status === 0
+                            order.order_status === 1
                                 ? "green"
-                                : order.order_status === 1
+                                : order.order_status === 2
                                     ? "yellow"
-                                    : order.order_status === 2
+                                    : order.order_status === 3
                                         ? "red"
                                         : colors.primary[400]
                         }
                         p={2}
                         borderRadius={8}
                     >
-                        <Typography variant="h6" style={{ color: "black" }}>Order ID: {order.id}</Typography>
+                        <Typography variant="h6" style={{ color: "black" }}>Cliente: {order.order_name}</Typography>
                         <DataGrid
                             rows={order.products}
                             columns={columns.map((column) => ({

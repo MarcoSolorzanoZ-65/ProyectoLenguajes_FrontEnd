@@ -33,7 +33,7 @@ const Login = (props) => {
                 } else {
                     const { token, user } = response;
                     const category_name = user.category.category_name;
-                    const allowedCategoryIds = [3]; // Specify the allowed category IDs for this app
+                    const allowedCategoryIds = [2]; // Specify the allowed category IDs for this app
 
                     if (allowedCategoryIds.includes(user.category_id)) {
                         sessionStorage.setItem('token', token);
