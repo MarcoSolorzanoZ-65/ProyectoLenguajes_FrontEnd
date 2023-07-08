@@ -3,11 +3,21 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { tokens } from "../theme";
 import { getFetch, putFetch } from "../commons/ApiMethods";
-
+import "./OrderComp.css";
 const OrderComp = () => {
     const columns = [
-        { field: "name", headerName: "Product Name", flex: 1 },
-        { field: "quantity", headerName: "Quantity", flex: 1 },
+        {
+            field: "name",
+            headerName: "Product Name",
+            flex: 1,
+            headerClassName: "blackColumnHeader",
+        },
+        {
+            field: "quantity",
+            headerName: "Quantity",
+            flex: 1,
+            headerClassName: "blackColumnHeader",
+        },
     ];
 
     const theme = useTheme();
@@ -78,11 +88,11 @@ const OrderComp = () => {
     };
 
     const filteredOrderData = orderData
-        .filter((order) => order.order_status === 1 || order.order_status === 0)
+        .filter((order) => order.order_status !== 2 && order.order_status !== 3 && order.order_status !== 0)
         .slice(0, 5);
 
     return (
-        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="200px" gap="20px">
+        <Box display="grid" gridTemplateColumns="repeat(10, 1fr)" gridAutoRows="400px" gap="20px" borderRadius={0} >
             {loading ? (
                 <Box
                     gridColumn="span 4"
@@ -120,8 +130,16 @@ const OrderComp = () => {
                         p={2}
                         borderRadius={8}
                     >
-                        <Typography variant="h6">Order ID: {order.id}</Typography>
-                        <DataGrid rows={order.products} columns={columns} />
+                        <Typography variant="h6" style={{ color: "black" }}>Order ID: {order.id}</Typography>
+                        <DataGrid
+                            rows={order.products}
+                            columns={columns.map((column) => ({
+                                ...column,
+                                valueGetter: (params) => params.row[column.field],
+                            }))}
+                            hideFooter={true}
+                            getRowClassName={(params) => "blackRowText"}
+                        />
                         <Button
                             variant="contained"
                             onClick={() => handleSetOrderStatus(order.id)}

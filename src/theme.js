@@ -120,7 +120,6 @@ export const tokens = (mode) => ({
       }),
 });
 
-// mui theme settings
 export const themeSettings = (mode) => {
   const colors = tokens(mode);
   return {
@@ -138,7 +137,7 @@ export const themeSettings = (mode) => {
             neutral: {
               dark: colors.grey[700],
               main: colors.grey[500],
-              light: colors.grey[100],
+              light: colors.grey[900],
             },
             background: {
               default: colors.primary[500],
@@ -155,7 +154,7 @@ export const themeSettings = (mode) => {
             neutral: {
               dark: colors.grey[700],
               main: colors.grey[500],
-              light: colors.grey[100],
+              light: colors.grey[900],
             },
             background: {
               default: "#fcfcfc",
