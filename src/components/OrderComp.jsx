@@ -111,7 +111,7 @@ const OrderComp = () => {
                     alignItems="center"
                     justifyContent="center"
                 >
-                    <Typography>No data available</Typography>
+                    <Typography>No hay ningun pedido activo...</Typography>
                 </Box>
             ) : (
                 filteredOrderData.map((order) => (
